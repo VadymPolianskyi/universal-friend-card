@@ -1,17 +1,18 @@
-package com.two.ufcard.dao.entity;
+package com.two.ufcard.protocol.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@javax.persistence.Entity
-@Data
-@AllArgsConstructor
+import java.io.Serializable;
+
 @NoArgsConstructor
-public class User extends Entity {
+@AllArgsConstructor
+@Data
+public class UserDto implements Dto, Serializable {
+    private String id;
     private String firstName;
     private String lastName;
     private String login;
-    private String password;
     private String cardNumber;
 }
