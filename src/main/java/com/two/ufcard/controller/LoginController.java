@@ -1,9 +1,7 @@
 package com.two.ufcard.controller;
 
 import com.two.ufcard.dao.UserDao;
-import com.two.ufcard.dao.UserDetailsDao;
 import com.two.ufcard.dao.entity.User;
-import com.two.ufcard.dao.entity.security.UserCredentials;
 import com.two.ufcard.protocol.LoginUserRequest;
 import com.two.ufcard.protocol.LoginUserResponse;
 import com.two.ufcard.util.auth.AuthService;
@@ -22,13 +20,11 @@ public class LoginController {
 
     private final AuthService authService;
     private final UserDao userDao;
-    private final UserDetailsDao userDetailsDao;
 
     @Autowired
-    public LoginController(AuthService authService, UserDao userDao, UserDetailsDao userDetailsDao) {
+    public LoginController(AuthService authService, UserDao userDao) {
         this.authService = authService;
         this.userDao = userDao;
-        this.userDetailsDao = userDetailsDao;
     }
 
     @PostMapping
