@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/api/register")
 @Slf4j
@@ -37,14 +35,15 @@ public class RegisterController {
     }
 
     @PostMapping
-    public RegisterUserResponse register(@RequestBody @Valid RegisterUserRequest request) {
+    public RegisterUserResponse register(@RequestBody RegisterUserRequest request) {
+
 
         User user = mapper.map(request.getUser(), User.class);
         user.setPassword(request.getPassword());
 
         userDao.create(user);
 
-        UserCredentials userCredentials = userDetailsDao.create(new UserCredentials(user.getId(), true, true,
+        UserCredentials userCredentials = userDetailsDao.create(new UserCredentials(user.getId(), user.getId(), true, true,
                 true, request.getPassword(), null));
 
         OAuth2AccessToken token = authService.login(userCredentials.getId());

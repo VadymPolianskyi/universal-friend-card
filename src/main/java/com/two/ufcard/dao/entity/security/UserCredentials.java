@@ -1,22 +1,24 @@
 package com.two.ufcard.dao.entity.security;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-public class UserCredentials extends com.two.ufcard.dao.entity.Entity implements UserDetails{
+@Data
+public class UserCredentials implements UserDetails {
 
+    @Id
+    private String id;
     private String name;
     private boolean expired = false;
     private boolean locked = false;
@@ -37,7 +39,7 @@ public class UserCredentials extends com.two.ufcard.dao.entity.Entity implements
 
     @Override
     public String getUsername() {
-        return name;
+        return id;
     }
 
     @Override

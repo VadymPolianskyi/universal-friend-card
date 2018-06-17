@@ -6,4 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserDao extends GenericDao<User, UserRepository> {
+    public User findByLogin(String login) {
+        return repository.findByLogin(login);
+    }
 }
