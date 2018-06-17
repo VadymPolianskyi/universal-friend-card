@@ -8,11 +8,8 @@ import lombok.NoArgsConstructor;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class RegisterUserResponse extends Response {
-    private String token;
-    private String type;
-    private Integer expiresIn;
-    private String refresh;
+@NoArgsConstructor
+public class DeleteCardResponse extends Response {
+    private boolean deleted;
 }

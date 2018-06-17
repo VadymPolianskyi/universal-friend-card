@@ -12,11 +12,12 @@ public class Mapper {
     private ModelMapper mapper = new ModelMapper();
 
     public <E extends Entity, D extends Dto> E map(D dto, Class<E> entityType) {
-
+        log.debug("Mapped from {} to {} class type.", dto.getClass().getName(), entityType.getName());
         return mapper.map(dto, entityType);
     }
 
-    public <D extends Entity, E> D revert(E entity, Class<D> dtoType) {
+    public <D extends Dto, E> D revert(E entity, Class<D> dtoType) {
+        log.debug("Mapped from {} to {} class type.", entity.getClass().getName(), dtoType.getName());
         return mapper.map(entity, dtoType);
     }
 }

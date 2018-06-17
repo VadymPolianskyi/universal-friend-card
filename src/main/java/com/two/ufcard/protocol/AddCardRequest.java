@@ -1,16 +1,15 @@
 package com.two.ufcard.protocol;
 
 import com.two.ufcard.protocol.api.Request;
+import com.two.ufcard.protocol.dto.CardDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
+
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginUserRequest extends Request {
-    private String login;
-    private String password;
+@Data
+public class AddCardRequest extends Request {
+    private CardDto card;
 }

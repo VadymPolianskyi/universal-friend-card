@@ -24,12 +24,12 @@ public class ServerWebConfiguration implements WebMvcConfigurer {
         return registration;
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH")
-                .allowedOrigins("http://localhost:4200");
-    }
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH")
+//                .allowedOrigins("http://localhost:4200");
+//    }
 
     @Bean
     public ObjectMapper objectMapper() {
