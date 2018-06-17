@@ -1,8 +1,8 @@
-package com.two.ufcard.dao;
+package com.two.ufcard.facade;
 
 import com.two.ufcard.dao.entity.security.UserCredentials;
 import com.two.ufcard.dao.repository.UserDetailsRepository;
-import com.two.ufcard.dao.repository.UserRepository;
+import com.two.ufcard.protocol.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class UserDetailsDao implements UserDetailsService {
+public class UserCredentialsService implements UserDetailsService {
 
-    protected final UserDetailsRepository repository;
+    private final UserDetailsRepository repository;
 
     @Autowired
-    public UserDetailsDao(UserDetailsRepository repository) {
+    public UserCredentialsService(UserDetailsRepository repository) {
         this.repository = repository;
     }
 
@@ -30,7 +30,14 @@ public class UserDetailsDao implements UserDetailsService {
         return repository.findById(id);
     }
 
-    public UserCredentials create(UserCredentials entity) {
+    public UserCredentials create(UserDto user, String password) {
+        return create(new UserCredentials(user.getId(), user.getLogin(), true, true,
+                true, password, null));
+    }
+
+    private UserCredentials create(UserCredentials entity) {
         return repository.save(entity);
     }
+
+
 }

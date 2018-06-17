@@ -1,12 +1,11 @@
 package com.two.ufcard.controller;
 
-import com.two.ufcard.dao.UserDao;
-import com.two.ufcard.dao.UserDetailsDao;
-import com.two.ufcard.dao.entity.User;
+import com.two.ufcard.facade.UserCredentialsService;
 import com.two.ufcard.dao.entity.security.UserCredentials;
+import com.two.ufcard.facade.UserFacade;
 import com.two.ufcard.protocol.RegisterUserRequest;
 import com.two.ufcard.protocol.RegisterUserResponse;
-import com.two.ufcard.util.Mapper;
+import com.two.ufcard.protocol.dto.UserDto;
 import com.two.ufcard.util.auth.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,33 +21,26 @@ import org.springframework.web.bind.annotation.RestController;
 public class RegisterController {
 
     private final AuthService authService;
-    private final UserDao userDao;
-    private final Mapper mapper;
-    private final UserDetailsDao userDetailsDao;
+    private final UserCredentialsService credentialsService;
+    private final UserFacade userFacade;
 
     @Autowired
-    public RegisterController(AuthService authService, UserDao userDao, Mapper mapper, UserDetailsDao userDetailsDao) {
+    public RegisterController(AuthService authService, UserCredentialsService credentialsService, UserFacade userFacade) {
         this.authService = authService;
-        this.userDao = userDao;
-        this.mapper = mapper;
-        this.userDetailsDao = userDetailsDao;
+        this.credentialsService = credentialsService;
+        this.userFacade = userFacade;
     }
 
     @PostMapping
     public RegisterUserResponse register(@RequestBody RegisterUserRequest request) {
 
 
-        User user = mapper.map(request.getUser(), User.class);
-        user.setPassword(request.getPassword());
-
-        userDao.create(user);
-
-        UserCredentials userCredentials = userDetailsDao.create(new UserCredentials(user.getId(), user.getId(), true, true,
-                true, request.getPassword(), null));
+        UserDto user = userFacade.create(request.getUser());
+        UserCredentials userCredentials = credentialsService.create(user, request.getPassword());
 
         OAuth2AccessToken token = authService.login(userCredentials.getId());
 
-        log.info("Registered new user {} {}({})." + user.getFirstName(), user.getLastName(), user.getCardNumber());
+        log.info("Registered new user {} {}({}).", user.getFirstName(), user.getLastName(), user.getCardNumber());
 
         return new RegisterUserResponse(token.getValue(), token.getTokenType(), token.getExpiresIn(), token.getRefreshToken().getValue());
     }

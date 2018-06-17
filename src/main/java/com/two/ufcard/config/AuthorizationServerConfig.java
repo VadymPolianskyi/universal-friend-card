@@ -1,6 +1,6 @@
 package com.two.ufcard.config;
 
-import com.two.ufcard.dao.UserDetailsDao;
+import com.two.ufcard.facade.UserCredentialsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,13 +21,13 @@ import javax.sql.DataSource;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     private AuthenticationManager authenticationManager;
-    private UserDetailsDao userDetailsDao;
+    private UserCredentialsService userCredentialsService;
     private DataSource dataSource;
 
     @Autowired
-    public AuthorizationServerConfig(AuthenticationManager authenticationManager, UserDetailsDao userDetailsDao, DataSource dataSource) {
+    public AuthorizationServerConfig(AuthenticationManager authenticationManager, UserCredentialsService userCredentialsService, DataSource dataSource) {
         this.authenticationManager = authenticationManager;
-        this.userDetailsDao = userDetailsDao;
+        this.userCredentialsService = userCredentialsService;
         this.dataSource = dataSource;
     }
 
@@ -54,7 +54,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager)
         //JWT
-        .userDetailsService(userDetailsDao)
+        .userDetailsService(userCredentialsService)
         .tokenStore(tokenStore())
         .accessTokenConverter(accessTokenConverter());
     }
@@ -76,7 +76,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     public UserAuthenticationConverter userAuthenticationConverter() {
         UserAuthenticationConverter converter = new DefaultUserAuthenticationConverter();
-        ((DefaultUserAuthenticationConverter) converter).setUserDetailsService(userDetailsDao);
+        ((DefaultUserAuthenticationConverter) converter).setUserDetailsService(userCredentialsService);
         return converter;
     }
 }

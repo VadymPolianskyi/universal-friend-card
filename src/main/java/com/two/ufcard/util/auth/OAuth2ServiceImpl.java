@@ -1,6 +1,6 @@
 package com.two.ufcard.util.auth;
 
-import com.two.ufcard.dao.UserDetailsDao;
+import com.two.ufcard.facade.UserCredentialsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,13 +21,13 @@ public class OAuth2ServiceImpl implements OAuth2Service {
 
     private final TokenStore tokenStore;
     private final AuthorizationServerEndpointsConfiguration configuration;
-    private final UserDetailsDao userDetailsDao;
+    private final UserCredentialsService userCredentialsService;
 
     @Autowired
-    public OAuth2ServiceImpl(TokenStore tokenStore, AuthorizationServerEndpointsConfiguration configuration, UserDetailsDao userDetailsDao) {
+    public OAuth2ServiceImpl(TokenStore tokenStore, AuthorizationServerEndpointsConfiguration configuration, UserCredentialsService userCredentialsService) {
         this.tokenStore = tokenStore;
         this.configuration = configuration;
-        this.userDetailsDao = userDetailsDao;
+        this.userCredentialsService = userCredentialsService;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
                 authorities, true, new HashSet<>(scopes), new HashSet<>(Collections.singletonList("oauth2-resource")),
                 null, responseTypes, extensionProps);
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetailsDao.loadUserByUsername(userId), "N/A", authorities);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userCredentialsService.loadUserByUsername(userId), "N/A", authorities);
 
         OAuth2Authentication auth = new OAuth2Authentication(oAuth2Request, authenticationToken);
 

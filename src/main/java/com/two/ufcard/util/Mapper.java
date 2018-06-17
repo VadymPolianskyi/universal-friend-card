@@ -1,6 +1,9 @@
 package com.two.ufcard.util;
 
+import com.two.ufcard.dao.entity.Card;
 import com.two.ufcard.dao.entity.Entity;
+import com.two.ufcard.dao.entity.User;
+import com.two.ufcard.protocol.dto.CardDto;
 import com.two.ufcard.protocol.dto.Dto;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -19,5 +22,21 @@ public class Mapper {
     public <D extends Dto, E> D revert(E entity, Class<D> dtoType) {
         log.debug("Mapped from {} to {} class type.", entity.getClass().getName(), dtoType.getName());
         return mapper.map(entity, dtoType);
+    }
+
+    public Card mapCard(CardDto dto, User user) {
+        Card card = mapper.map(dto, Card.class);
+        card.setUser(user);
+        log.debug("Mapped from CardDto to Card class type.");
+        return card;
+    }
+
+    public CardDto revertCard(Card card) {
+        CardDto dto = mapper.map(card, CardDto.class);
+        if (card.getUser() != null)
+            dto.setUserId(card.getUser().getId());
+
+        log.debug("Mapped from Card to CardDto class type.");
+        return dto;
     }
 }
